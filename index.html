@@ -45,12 +45,17 @@
     .category { margin-top: 28px; }
     .category:first-child { margin-top: 0; }
     .category-title { margin: 0 0 4px; font-size: 25px; }
+    .bestsellers { padding: 20px; border-radius: 12px; background: #e8ecde; }
+    .bestsellers .product { padding: 16px 0; }
+    .bestsellers .product:last-child { padding-bottom: 0; border-bottom: 0; }
+    .bestsellers .product-name { font-size: 20px; }
     .category-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
     .category-heading .category-title { margin: 0; }
     .topping-options { margin: 10px 0 0; padding-left: 20px; }
     .topping-options li { padding: 4px 0; }
     .attributes { margin: 0 0 16px; color: var(--earth); font-size: 11px; font-weight: 700; letter-spacing: .075em; }
     .intro { max-width: 65ch; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.75; }
+    .catalog > .intro { margin-bottom: 24px; }
     .pack-note { margin: 28px 0 12px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--earth); font-size: 11px; font-weight: 700; letter-spacing: .06em; }
     .product { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; border-bottom: 1px solid var(--line); }
     .product-info { min-width: 0; }
@@ -102,11 +107,13 @@
 
     <section class="catalog" aria-labelledby="menu-title">
       <h2 id="menu-title">Nuestros waffles</h2>
+      <p class="attributes">DE AVENA • SIN AZÚCAR • SIN LACTOSA</p>
+      <p class="intro">Nuestros waffles son ideales para acompañar tus desayunos o meriendas, tener algo rico y práctico a mano, como reemplazo del pan o para los peques de la casa, complementar con tus frutas y acompañamientos favoritos.</p>
       <nav class="tabs" id="tabs" aria-label="Categorías del menú"></nav>
       <div id="items" aria-live="polite"><p class="empty">Preparando el menú…</p></div>
       <aside class="care">
         <strong>Para disfrutarlos mejor</strong>
-        <p>Mantener refrigerados.<br>Recalentar a gusto en microondas, air fryer o mixtera.</p>
+        <p><b>MANTENER REFRIGERADOS.</b><br>Recalentar a gusto en microondas, air fryer o mixtera.</p>
       </aside>
     </section>
   </main>
@@ -114,8 +121,6 @@
   <footer>Saludablemente placentero.</footer>
 
   <template id="waffle-intro">
-    <p class="attributes">DE AVENA • SIN AZÚCAR • SIN LACTOSA</p>
-    <p class="intro">Nuestros waffles son ideales para acompañar tus desayunos o meriendas, tener algo rico y práctico a mano, como reemplazo del pan o para los peques de la casa, complementar con tus frutas y acompañamientos favoritos.</p>
     <p class="pack-note">ELEGÍ LA CANTIDAD QUE MEJOR SE ADAPTE A TU RUTINA:</p>
   </template>
 
@@ -124,6 +129,7 @@
     const categories = ["Sin agregados", "Con toppings"];
     const tabs = document.querySelector("#tabs");
     const items = document.querySelector("#items");
+    const care = document.querySelector(".care");
     const price = new Intl.NumberFormat("es-PY");
 
     function parseCsv(text) {
@@ -138,8 +144,8 @@
           else value += char;
         }
         values.push(value);
-        return { category: values[0], name: values[1], description: values[2], amount: Number(values[3]) };
-      }).filter(product => product.category && product.name && Number.isFinite(product.amount));
+        return { category: values[0], name: values[1], description: values[2], amount: values[3]?.trim() ? Number(values[3]) : null };
+      }).filter(product => product.category && product.name && (product.amount === null || Number.isFinite(product.amount)));
     }
 
     function groupByCategory(products) {
@@ -163,6 +169,7 @@
     }
 
     function render() {
+      care.hidden = state.active !== "Sin agregados";
       const groups = groupByCategory(state.products);
       tabs.querySelectorAll("button").forEach(button => {
         button.setAttribute("aria-pressed", String(button.textContent === state.active));
@@ -170,13 +177,19 @@
       items.replaceChildren();
       const visible = (state.active === "Sin agregados"
         ? ["Waffles"]
-        : ["Toppings clásicos", "Toppings especiales", "Waffles con toppings"]
+        : ["Waffles con toppings", "Toppings clásicos", "Toppings especiales", "Los más vendidos"]
       ).filter(category => groups[category]);
       visible.forEach(category => {
         const section = document.createElement("section");
         section.className = "category";
         if (category === "Waffles") {
           section.append(document.querySelector("#waffle-intro").content.cloneNode(true));
+        } else if (category === "Los más vendidos") {
+          section.classList.add("bestsellers");
+          const heading = document.createElement("h3");
+          heading.className = "category-title";
+          heading.textContent = category;
+          section.append(heading);
         } else if (category.startsWith("Toppings ")) {
           const header = document.createElement("div");
           header.className = "category-heading";
@@ -184,10 +197,7 @@
           heading.className = "category-title";
           const label = category.replace("Toppings ", "");
           heading.textContent = label.charAt(0).toUpperCase() + label.slice(1);
-          const amount = document.createElement("span");
-          amount.className = "price";
-          amount.textContent = `Gs. ${price.format(groups[category][0].amount)}`;
-          header.append(heading, amount);
+          header.append(heading);
           const options = document.createElement("ul");
           options.className = "topping-options";
           groups[category].forEach(product => {
@@ -204,12 +214,9 @@
           article.className = "product";
           const details = document.createElement("div");
           details.className = "product-info";
-          const name = document.createElement("h3");
+          const name = document.createElement(category === "Los más vendidos" ? "h4" : "h3");
           name.className = "product-name";
           name.textContent = product.name;
-          const amount = document.createElement("span");
-          amount.className = "price";
-          amount.textContent = `Gs. ${price.format(product.amount)}`;
           details.append(name);
           if (product.description) {
             const description = document.createElement("p");
@@ -217,7 +224,13 @@
             description.textContent = product.description;
             details.append(description);
           }
-          article.append(details, amount);
+          article.append(details);
+          if (product.amount !== null) {
+            const amount = document.createElement("span");
+            amount.className = "price";
+            amount.textContent = `Gs. ${price.format(product.amount)}`;
+            article.append(amount);
+          }
           section.append(article);
         });
         items.append(section);

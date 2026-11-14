@@ -2,15 +2,25 @@ categoria;nombre;descripcion;precio
 Waffles;Pack de 5 unidades;Ideal para organizar tus meriendas de la semana.;50000
 Waffles;Pack de 3 unidades;Para quienes buscan una opción intermedia.;35000
 Waffles;Pack de 2 unidades;Para quienes quieren probarlos o disfrutar una merienda.;25000
-Waffles con toppings;Waffle de cacao con toppings;Elegí tus toppings favoritos entre las opciones clásicas y especiales.;35000
-Toppings clásicos;Mantequilla de maní;;25000
-Toppings clásicos;Mermelada Light (Guayaba o Frutilla);;25000
-Toppings clásicos;Frutas;;25000
-Toppings clásicos;Coco rallado;;25000
-Toppings clásicos;Leche en polvo Light;;25000
-Toppings clásicos;Granola;;25000
-Toppings clásicos;Miel;;25000
-Toppings especiales;Mantequilla de cacao;;30000
-Toppings especiales;Dulce de leche light;;30000
-Toppings especiales;Trocitos de chocolate 70% cacao;;30000
-Toppings especiales;Leche condensada light;;30000
+Waffles con toppings;Waffle de avena con toppings clásicos;Elegí hasta 4 toppings clásicos.;25000
+Waffles con toppings;Waffle de avena con toppings;Elegí hasta 4 toppings entre clásicos y especiales.;30000
+Waffles con toppings;Waffle de cacao con toppings;Elegí hasta 4 toppings entre clásicos y especiales.;35000
+Los más vendidos;Waffle de avena con toppings;Mantequilla de maní + frutas + granola + coco.;
+Los más vendidos;Waffle de avena con toppings;Dulce de leche light + banana + canela o cacao en polvo.;
+Los más vendidos;Waffle de cacao con toppings;Mantequilla de cacao + trocitos de chocolate 70% cacao + frutillas.;
+Toppings clásicos;Mantequilla de maní;;
+Toppings clásicos;Miel;;
+Toppings clásicos;Mermelada Light (Guayaba o Frutilla);;
+Toppings clásicos;Frutas;;
+Toppings clásicos;Granola;;
+Toppings clásicos;Coco rallado;;
+Toppings clásicos;Canela;;
+Toppings clásicos;Leche en polvo Light;;
+Toppings especiales;Mantequilla de cacao;;
+Toppings especiales;Dulce de leche light sin lactosa;;
+Toppings especiales;Leche condensada sin lactosa;;
+Toppings especiales;Trocitos de chocolate 70% cacao;;
+Toppings especiales;Chips de chocolate semi amargo;;
+Toppings especiales;Yogurt griego;;
+
+
